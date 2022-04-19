@@ -1,0 +1,21 @@
+Climate data:
+	yearly,daily,monthly
+	2015-2100
+	surface_temp
+
+	simulate how climate differences will effect
+	the status quo and what to look out for
+
+
+
+crop data:
+	EDA area harvested and yield
+
+food security:
+	How close to the actual farming impacts 
+	food security, i.e. how domestic crop production
+	effects food security
+
+migration:
+	chart showing flow of migration
+	
