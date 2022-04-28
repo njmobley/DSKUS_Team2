@@ -21,5 +21,5 @@ PsudeoCode:
 5. Stored trained models into GitHub (Pickle)
 6. Create website to display visualizations and provide users ability to see global effects on counterfactuals. 
 (i.e what happens to a certain country if the temperatures rise 5 degrees instead of 10)
-	- Create website by using FIMS system
+	- Create website using FIMS system
 	  (reffering G. Nica-Avram et al,.(2020), FIMS: Identifying, Predicting and Visualising Food Insecurity.)
