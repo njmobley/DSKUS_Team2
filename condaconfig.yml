@@ -1,0 +1,11 @@
+name: dskus
+
+dependencies:
+  - python=3.8
+  - numpy
+  - matplotlib
+  - pandas
+  - seaborn
+  - cartopy=0.19.0.post1
+  - xarray
+  - bokeh
