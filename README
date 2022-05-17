@@ -1,0 +1,3 @@
+# conda environment config
+conda env create --name dskus --file=condaconfig.yml
+conda install -n dskus ipykernel --update-deps --force-reinstall
