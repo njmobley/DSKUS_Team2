@@ -1,11 +1,21 @@
 name: dskus
-
+channels:
+  - conda-forge
+  - defaults
 dependencies:
   - python=3.8
   - numpy
   - matplotlib
   - pandas
   - seaborn
+  - netcdf4 
+  - h5netcdf
+  - hdf5
+  - dask
+  - ipykernel
   - cartopy=0.19.0.post1
   - xarray
+  - urllib2
+  - chardet
+  - requests
   - bokeh
