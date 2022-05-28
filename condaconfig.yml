@@ -6,6 +6,8 @@ dependencies:
   - python=3.8
   - numpy
   - matplotlib
+  - altair
+  - vega_datasets
   - pandas
   - seaborn
   - netcdf4 
