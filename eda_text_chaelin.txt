@@ -1,6 +1,0 @@
-We made two datafram with SouthEast Asia's harvested area and agriculture yield data.
-We want to see the data with 'Year' column to find changes in every year of each area and item.
-We can see that Indonesia have the largest harvested area in the SouthEastern Asia.
-Lao People's Democretic Repubilc Brunei Darussalam, Singapore and Timor-Leste have less harvested area relatively.
-In the df_yield_plot, we can find that Banana, Cassava, Papayas, Pinapples, Sugar cane and Tomatoes made the largest yield in the SouthEastern Asia.
-However, the gaps between each areas and crops are so large that it seems that outliers should be removed from this analysis.

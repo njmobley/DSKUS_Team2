@@ -1,0 +1,25 @@
+climate data:
+	- surface temperature
+	- monthly 
+	- aggregate by country (hopefully somebody has done this)
+
+PsudeoCode:
+
+1. Collect individual files
+	- Collect climate data from NASA AgMERRA
+	- Unemployment data from
+	- Migration data from International Migrants Stcok Data
+	- Food insecurity data from GFSI
+	- Crop production data from FAOSTAT
+2. Store them in collective repository (GitHub)
+3. Make ("borrow") Simulation for food insecurity indicators:
+	- Make Climate Simulator
+	- Crop Production Simulator (what will happen in future climate conditions)
+	- Migration Simulator
+	- Unemployment Simulator
+4. Train predictive model with Food Insecurity as response and simulated variables as features
+5. Stored trained models into GitHub (Pickle)
+6. Create website to display visualizations and provide users ability to see global effects on counterfactuals. 
+(i.e what happens to a certain country if the temperatures rise 5 degrees instead of 10)
+	- Create website using FIMS system
+	  (reffering G. Nica-Avram et al,.(2020), FIMS: Identifying, Predicting and Visualising Food Insecurity.)
