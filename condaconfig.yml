@@ -6,6 +6,10 @@ dependencies:
   - python=3.8
   - numpy
   - nodejs
+  - python-dotenv
+  - regex
+  - plotly
+  - pyLDAvis
   - arch-py
   - flask
   - matplotlib
