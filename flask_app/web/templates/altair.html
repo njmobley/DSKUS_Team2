@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block script %}
+<!-- 
+put your custom script or styling here
+
+-->
+{% endblock script %}
+
+
+{% block my_content %}
+</div>
+<!-- Altair plot placeholder -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Placeholder for the global-cases plot-->
+        <div id="plot_chlorepleth"></div>
+    <!-- Placeholder for the tooltip -->
+    <div id="vis-tooltip" class="vg-tooltip"></div>
+</div>
+<!-- Render Charts -->
+<script type="text/javascript">
+    function parse(url, div) {
+        var opt = {
+            mode: "vega-lite",
+            renderer: "svg",
+            actions: { export: true, source: false, editor: false }
+        };
+        vegaEmbed("#" + div, url, opt, function (error, result) {
+            // result.view is the Vega View, url is the original Vega-Lite specification
+            vegaTooltip.vegaLite(result.view, url);
+        });
+    }
+    //Parse your Json variable here
+    parse({{ context.plot_chlorepleth | safe }}, "plot_chlorepleth");
+</script>
+{% endblock my_content %}
