@@ -1,29 +1,64 @@
 {% extends "layout.html" %}
 {% block script %}
 <!-- 
-put your custom script or styling here
-
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
 -->
 {% endblock script %}
 
 
 {% block my_content %}
-</div>
 <!-- Altair plot placeholder -->
-<div class="container-fluid">
-    <div class="row">
-        <!-- Placeholder for the global-cases plot-->
-        <div id="plot_chlorepleth"></div>
-    <!-- Placeholder for the tooltip -->
-    <div id="vis-tooltip" class="vg-tooltip"></div>
+<div class="card card-dark">
+    <div class="card-header border-0">
+      <h3 class="card-title">Default Card Example</h3>
+      <div class="card-tools">
+        <!-- Buttons, labels, and many other things can be placed here! -->
+        <!-- Here is a label for example -->
+        <span class="badge badge-primary">Label</span>
+      </div>
+      <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body" id="plot_chlorepleth">
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      The footer of the card
+    </div>
+    <!-- /.card-footer -->
 </div>
+<!-- /.card -->
+  
+<div class="card card-dark">
+    <div class="card-header border-0">
+      <h3 class="card-title">Default Card Example</h3>
+      <div class="card-tools">
+        <!-- Buttons, labels, and many other things can be placed here! -->
+        <!-- Here is a label for example -->
+        <span class="badge badge-primary">Label</span>
+      </div>
+      <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body" id="plot_linechart">
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      The footer of the card
+    </div>
+    <!-- /.card-footer -->
+</div>
+<!-- /.card -->
+
 <!-- Render Charts -->
 <script type="text/javascript">
     function parse(url, div) {
         var opt = {
             mode: "vega-lite",
             renderer: "svg",
-            actions: { export: true, source: false, editor: false }
+            actions: { export: true, source: true, editor: true}
         };
         vegaEmbed("#" + div, url, opt, function (error, result) {
             // result.view is the Vega View, url is the original Vega-Lite specification
@@ -31,6 +66,7 @@ put your custom script or styling here
         });
     }
     //Parse your Json variable here
-    parse({{ context.plot_chlorepleth | safe }}, "plot_chlorepleth");
+    parse({{ context.plot_chlorepleth | safe }}, "plot_chlorepleth")
+    parse({{ context.plot_linechart | safe }}, "plot_linechart");
 </script>
 {% endblock my_content %}

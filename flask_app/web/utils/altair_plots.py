@@ -32,11 +32,12 @@ def altair_global_map(final_df):
     slider = alt.binding_range(
         step=1,
         min=df['year'].min(), 
-        max=df['year'].max()
+        max=df['year'].max(),
+        name='Year: '
     )
 
     select_date = alt.selection_single(
-        name="slider", 
+        name=" ", 
         fields=['year'],
         bind=slider, 
     )
@@ -47,7 +48,11 @@ def altair_global_map(final_df):
     )
 
     foreground = alt.Chart(df).mark_geoshape()\
-        .encode(color=alt.Color('soiltemp:Q', scale=alt.Scale(domain=[df['soiltemp'].min(), df['soiltemp'].max()], scheme='blueorange')))\
+        .encode(color=alt.Color('surfacetempanomaly:Q', scale=alt.Scale(domain=[df['surfacetempanomaly'].min(), df['surfacetempanomaly'].max()], scheme='blueorange')),
+                tooltip=[
+                    alt.Tooltip("country_y:N", title="Country"),
+                    alt.Tooltip("surfacetempanomaly:Q", title="Surface Temp")
+                ])\
         .add_selection(select_date)\
         .transform_filter(select_date)\
         .transform_lookup(
@@ -56,80 +61,62 @@ def altair_global_map(final_df):
                                 fields=["type", "properties", "geometry"])
         )
 
+    ranked_text = alt.Chart(df).mark_text(align='right').encode(
+        y=alt.Y('row_number:O',axis=None)
+    ).transform_filter(
+        select_date
+    ).transform_window(
+        row_number='row_number()',
+        rank='rank(surfacetempanomaly)',
+        sort=[alt.SortField('surfacetempanomaly', order='descending')]
+    ).transform_filter(
+        alt.datum.rank <= 10
+    ).properties(width=30)
+
     final_map = (
         (background + foreground)
-        .configure_view(strokeWidth=0)
-        .properties(width=700, height=400, title='Total Confirmed Cases/Country')
+        .properties(width=600, height=400, title='Surface Temperature by Country/Year')
         .project("naturalEarth1")
     )
-    final_map_json = final_map.to_json()
+
+    temperature = ranked_text.encode(text='surfacetempanomaly:N').properties(title=alt.TitleParams(text='Temp', align='right'))
+    country = ranked_text.encode(text='country_y:N').properties(title=alt.TitleParams(text='Country', align='right'))
+    text = alt.hconcat(country, temperature) # Combine data tables
+
+    cat = alt.hconcat(final_map, text)
+    final_map_json = cat.to_json()
     return final_map_json
 
 
-def altair_global_time_series(timeseries_final):
+def altair_global_line_chart(final_df):
     #Plot Altair 6; Global time series chart for daily new cases, recovered, and deaths - version 3 (more fancy selector)
     #declare data and initialization
-    data = timeseries_final
+    df = final_df
+    alt.data_transformers.disable_max_rows()
+    highlight = alt.selection(type='single', on='mouseover',
+                          fields=['country_y'], nearest=True)
 
-    #specifying form of data; read: https://altair-viz.github.io/user_guide/data.html#long-form-vs-wide-form-data
-    base = alt.Chart(data).transform_fold(
-        ['daily new cases', 'daily new recovered', 'daily new deaths']
-    ).properties(
-        title='Global Time Series'
-    )
-    base.configure_title(
-        fontSize=20,
-        font='Courier',
-        anchor='start',
-        color='gray',
-        align="center"
-    )
-    # Create a selection that chooses the nearest point & selects based on x-value
-    nearest = alt.selection(type='single', nearest=True, on='mouseover',
-                            fields=['date'], empty='none')
+    base = alt.Chart(df).mark_line(point=True)\
+        .encode(
+            alt.X('soiltemp', scale=alt.Scale(zero=False)),
+            alt.Y('precipitationflux', scale=alt.Scale(zero=False)),
+            order=['year'],
+            color=alt.Color('country_y', legend=None)
+        )
 
-    # The basic line
-    line = base.mark_line().encode(
-        x='date:T',
-        y=alt.Y('value:Q', axis=alt.Axis(title='# of cases')),
-        color='key:N',
+    points = base.mark_circle().encode(
+            opacity=alt.value(0)
+        ).add_selection(
+            highlight
+        )
 
-    )
+    lines = base.mark_line().encode(
+        size=alt.condition(~highlight, alt.value(1), alt.value(3)),
+        color=alt.condition(highlight, 'country_y:N', alt.value("lightgray"), legend=None),
+        tooltip=[alt.Tooltip("country_y:N", title="Country"), alt.Tooltip("year:N", title="Year")]
+    ).properties(width=300)
 
-    # Transparent selectors across the chart. This is what tells us
-    # the x-value of the cursor
-    selectors = base.mark_point().encode(
-        x='date:T',
-        opacity=alt.value(0),
-        tooltip=[alt.Tooltip('yearmonthdate(date)', title="Date")]
-    ).add_selection(
-        nearest
-    )
-
-    # Draw points on the line, and highlight based on selection
-    points = line.mark_point().encode(
-        opacity=alt.condition(nearest, alt.value(1), alt.value(0))
-    )
-
-    # Draw text labels near the points, and highlight based on selection
-    text = line.mark_text(align='left', dx=5, dy=-5).encode(
-        text=alt.condition(nearest, 'value:Q', alt.value(' '))
-    )
-
-    # Draw a rule at the location of the selection
-    rules = alt.Chart(data).mark_rule(color='gray').encode(
-        x='date:T',
-
-    ).transform_filter(
-        nearest
-    )
-
-    # Put the five layers into a chart and bind the data
-    chart = alt.layer(
-        line, selectors, points, rules, text
-    ).properties(
-        width=1300, height=500
-    )
+    chart = points + lines
     chart_json = chart.to_json()
     return chart_json
 

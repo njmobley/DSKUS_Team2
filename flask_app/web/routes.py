@@ -15,5 +15,7 @@ df_climate, df_migration, df_crop, df_food = utils.load_data()
 def plot_altair_global():
     #ploting
     altair_global_map = altair_plots.altair_global_map(df_climate)
-    context = {'plot_chlorepleth': altair_global_map}
+    altair_global_line_chart = altair_plots.altair_global_line_chart(df_climate)
+    context = {'plot_chlorepleth': altair_global_map, 
+                'plot_linechart': altair_global_line_chart}
     return render_template('altair.html', context=context)

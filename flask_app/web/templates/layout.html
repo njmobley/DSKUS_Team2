@@ -102,6 +102,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </li>
                             </ul>
                         </li>
+                        <!-- Chart.js -->
+                        <li class="nav-item has-treeview menu-closed">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Per country plot 
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link ">
+                                
+                                        <p>Country Name</p>
+                                    </a>
+                                </li>
+                                <li>
+                                <!-- /.Country selector -->
+                                <form  method="POST" action="{{url_for('plot_altair_global')}}">
+                                    <select name="country_name" id="country_name" required="required" style="width:200px">
+                                        <option value="" label="Select a country ... " selected="selected">Select a country ... </option>
+                                            <option value="Afghanistan">Afghanistan</option>
+                                            <option value="Albania">Albania</option>
+                                            <option value="Algeria">Algeria</option>
+                                            <option value="Andorra">Andorra</option>
+                                            <option value="Angola">Angola</option>
+                                            <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <input  type="submit" value="Submit" class="btn btn-primary"></input>
+                                </li>
+                                </form>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
