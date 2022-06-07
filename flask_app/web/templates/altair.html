@@ -1,14 +1,13 @@
 {% extends "layout.html" %}
 {% block script %}
-<!-- 
-h1 {text-align: center;}
-p {text-align: center;}
-div {text-align: center;}
--->
+
 {% endblock script %}
 
 
 {% block my_content %}
+<head>
+    <link rel="stylesheet" href="flask_app/web/templates/styles.css">
+</head>
 <!-- Altair plot placeholder -->
 <div class="card card-dark">
     <div class="card-header border-0">
@@ -58,7 +57,8 @@ div {text-align: center;}
         var opt = {
             mode: "vega-lite",
             renderer: "svg",
-            actions: { export: true, source: true, editor: true}
+            actions: { export: false, source: false, editor: false},
+            padding: 0
         };
         vegaEmbed("#" + div, url, opt, function (error, result) {
             // result.view is the Vega View, url is the original Vega-Lite specification
