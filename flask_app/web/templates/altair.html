@@ -11,11 +11,11 @@
 <!-- Altair plot placeholder -->
 <div class="card card-dark">
     <div class="card-header border-0">
-      <h3 class="card-title">Default Card Example</h3>
+      <h3 class="card-title">Modeling Food Security in relation to GDP and Surface Temperature Change</h3>
       <div class="card-tools">
         <!-- Buttons, labels, and many other things can be placed here! -->
         <!-- Here is a label for example -->
-        <span class="badge badge-primary">Label</span>
+        <span class="badge badge-primary">model</span>
       </div>
       <!-- /.card-tools -->
     </div>
@@ -24,28 +24,7 @@
     </div>
     <!-- /.card-body -->
     <div class="card-footer">
-      The footer of the card
-    </div>
-    <!-- /.card-footer -->
-</div>
-<!-- /.card -->
-  
-<div class="card card-dark">
-    <div class="card-header border-0">
-      <h3 class="card-title">Default Card Example</h3>
-      <div class="card-tools">
-        <!-- Buttons, labels, and many other things can be placed here! -->
-        <!-- Here is a label for example -->
-        <span class="badge badge-primary">Label</span>
-      </div>
-      <!-- /.card-tools -->
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body" id="plot_linechart">
-    </div>
-    <!-- /.card-body -->
-    <div class="card-footer">
-      The footer of the card
+      Surface temperature plays a big role in predicting food insecurity. As we can see as the temperature change increases. So does food insecurity. Particularly various countries in Africa see a significant impact due to global warming.
     </div>
     <!-- /.card-footer -->
 </div>
@@ -67,6 +46,5 @@
     }
     //Parse your Json variable here
     parse({{ context.plot_chlorepleth | safe }}, "plot_chlorepleth")
-    parse({{ context.plot_linechart | safe }}, "plot_linechart");
 </script>
 {% endblock my_content %}

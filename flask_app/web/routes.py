@@ -8,14 +8,13 @@ import json
 
 
 #loading data
-df_climate, df_migration, df_crop, df_food = utils.load_data()
+df_model, df_climate, df_migration, df_crop, df_food = utils.load_data()
 
 @app.route("/")
 @app.route("/altair")
 def plot_altair_global():
     #ploting
-    altair_global_map = altair_plots.altair_global_map(df_climate)
-    altair_global_line_chart = altair_plots.altair_global_line_chart(df_climate)
-    context = {'plot_chlorepleth': altair_global_map, 
-                'plot_linechart': altair_global_line_chart}
+    altair_global_map = altair_plots.altair_global_map(df_model)
+    # altair_global_line_chart = altair_plots.altair_global_line_chart(df_climate)
+    context = {'plot_chlorepleth': altair_global_map}
     return render_template('altair.html', context=context)

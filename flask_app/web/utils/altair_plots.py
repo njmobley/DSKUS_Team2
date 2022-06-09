@@ -24,21 +24,21 @@ def timestamp(t):
 def altair_global_map(final_df):
     # Plot Altair 1: Per country total cases and cases/million populations
     # Only plotting 100 countries
-    df = final_df
+    dfnew = final_df
     alt.data_transformers.disable_max_rows()
     #base configuration
     countries = alt.topo_feature(data.world_110m.url, 'countries')
 
     slider = alt.binding_range(
-        step=1,
-        min=df['year'].min(), 
-        max=df['year'].max(),
-        name='Year: '
+        step=0.5,
+        min=-5, 
+        max=5,
+        name='Temperature: '
     )
 
-    select_date = alt.selection_single(
+    select_temp = alt.selection_single(
         name=" ", 
-        fields=['year'],
+        fields=['tempstep'],
         bind=slider, 
     )
 
@@ -47,44 +47,61 @@ def altair_global_map(final_df):
         stroke='white'
     )
 
-    foreground = alt.Chart(df).mark_geoshape()\
-        .encode(color=alt.Color('surfacetempanomaly:Q', scale=alt.Scale(domain=[df['surfacetempanomaly'].min(), df['surfacetempanomaly'].max()], scheme='blueorange')),
+    foreground = alt.Chart(dfnew).mark_geoshape()\
+        .encode(color=alt.Color('gfsi_hat:Q', scale=alt.Scale(domain=[dfnew['gfsi_hat'].min(), dfnew['gfsi_hat'].max()], scheme=alt.SequentialMultiHue('viridis'))),
                 tooltip=[
-                    alt.Tooltip("country_y:N", title="Country"),
-                    alt.Tooltip("surfacetempanomaly:Q", title="Surface Temp")
+                    alt.Tooltip("name:N", title="Country"),
+                    alt.Tooltip("gfsi_hat:Q", title="GFSI"),
+                    alt.Tooltip("gdp:Q", title="GDP"),
+                    alt.Tooltip("surfacetempanomaly:Q", title="Temp Anomaly")
                 ])\
-        .add_selection(select_date)\
-        .transform_filter(select_date)\
+        .add_selection(select_temp)\
+        .transform_filter(select_temp)\
         .transform_lookup(
             lookup='country-code',
             from_=alt.LookupData(countries, key='id',
                                 fields=["type", "properties", "geometry"])
         )
 
-    ranked_text = alt.Chart(df).mark_text(align='right').encode(
+    bubble_chart = alt.Chart(dfnew).mark_circle().encode(
+        x='surfacetempanomaly',
+        y='gfsi_hat',
+        size = alt.Size('gdp', scale=alt.Scale(type='pow', exponent=0.5)),
+        color='region',
+        tooltip=['name', 'gfsi_hat','surfacetempanomaly', 'precipitationflux', 'gdp', 'population','migration']
+    ).add_selection(select_temp
+    ).transform_filter(select_temp
+    ).properties(
+        width=250,
+        height=250
+    )
+
+    ranked_text = alt.Chart(dfnew).mark_text(align='right').encode(
         y=alt.Y('row_number:O',axis=None)
     ).transform_filter(
-        select_date
+        select_temp
     ).transform_window(
         row_number='row_number()',
-        rank='rank(surfacetempanomaly)',
-        sort=[alt.SortField('surfacetempanomaly', order='descending')]
+        rank='rank(gfsi_hat)',
+        sort=[alt.SortField('gfsi_hat', order='ascending')]
     ).transform_filter(
         alt.datum.rank <= 10
     ).properties(width=30)
 
     final_map = (
         (background + foreground)
-        .properties(width=600, height=400, title='Surface Temperature by Country/Year')
+        .properties(width=600, height=400, title='Global Food Security Index')
         .project("naturalEarth1")
     )
 
-    temperature = ranked_text.encode(text='surfacetempanomaly:N').properties(title=alt.TitleParams(text='Temp', align='right'))
-    country = ranked_text.encode(text='country_y:N').properties(title=alt.TitleParams(text='Country', align='right'))
+    temperature = ranked_text.encode(text='gfsi_hat:N').properties(title=alt.TitleParams(text='GFSI', align='right'))
+    country = ranked_text.encode(text='name:N').properties(title=alt.TitleParams(text='Country', align='right'))
     text = alt.hconcat(country, temperature) # Combine data tables
 
     cat = alt.hconcat(final_map, text)
-    final_map_json = cat.to_json()
+    cat2 = alt.vconcat(cat, bubble_chart)
+
+    final_map_json = cat2.to_json()
     return final_map_json
 
 
