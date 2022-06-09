@@ -20,7 +20,8 @@ def load_chartjs_map_data(final_df, df_pop):
 
 #loading data
 def load_data():
-
+    df_model = pd.read_csv(
+        'https://raw.githubusercontent.com/njmobley/DSKUS_Team2/main/data/predictedmodelfull.csv')
     df_climate = pd.read_csv(
         'https://raw.githubusercontent.com/njmobley/DSKUS_Team2/main/data/climate_by_country.csv')
     df_migration = pd.read_csv('https://raw.githubusercontent.com/njmobley/DSKUS_Team2/main/data/migration_9020.csv')
@@ -29,7 +30,7 @@ def load_data():
         'https://raw.githubusercontent.com/njmobley/DSKUS_Team2/main/data/food_security_data.csv')
     
 
-    return df_climate, df_migration, df_crop, df_food
+    return df_model, df_climate, df_migration, df_crop, df_food
 
 
 def preprocessed_data(total_confirmed, total_death, total_recovered):
